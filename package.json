@@ -1,0 +1,24 @@
+{
+  "name": "meu-teto-landing",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Landing page de vendas do Meu Teto, com servidor Node para formulário, cabeçalhos de segurança e HTTPS.",
+  "engines": {
+    "node": ">=22.9"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.js",
+    "test": "node --test test/*.test.js",
+    "pages": "python3 scripts/make_pages.py",
+    "domain": "node scripts/set-domain.mjs",
+    "check": "node scripts/check-links.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "compression": "^1.8.2",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.5",
+    "helmet": "^8.3.0"
+  }
+}

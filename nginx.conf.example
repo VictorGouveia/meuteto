@@ -1,0 +1,27 @@
+# Exemplo para VPS/KVM (Ubuntu). Troque meuteto.com.br pelo seu domínio e gere o certificado com: sudo certbot --nginx -d meuteto.com.br -d www.meuteto.com.br
+server {
+    listen 80;
+    server_name meuteto.com.br www.meuteto.com.br;
+    return 301 https://meuteto.com.br$request_uri;      # 4. força HTTPS
+}
+server {
+    listen 443 ssl http2;
+    server_name www.meuteto.com.br;
+    ssl_certificate     /etc/letsencrypt/live/meuteto.com.br/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/meuteto.com.br/privkey.pem;
+    return 301 https://meuteto.com.br$request_uri;
+}
+server {
+    listen 443 ssl http2;
+    server_name meuteto.com.br;
+    ssl_certificate     /etc/letsencrypt/live/meuteto.com.br/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/meuteto.com.br/privkey.pem;
+    client_max_body_size 20k;
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;    # o servidor Node usa isto para saber que é HTTPS
+    }
+}
